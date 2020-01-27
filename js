@@ -26,7 +26,6 @@ $(function() {
                            break;
                        }
                    }
-               }
            } else {
                var r = Math.floor(Math.random() * this.board.length);
                var c = Math.floor(Math.random() * (this.board.length - length));
@@ -47,12 +46,28 @@ $(function() {
                }
            }
         }
-      } /* End function Ship */
+    }
+    this.place();
+} /* End function Ship */
 
-      /*#### Add function checkSunk ##### */
+      /*#### Add function checkSunk 1/15/20 ##### */
+    /* How to tell if the ship is sunk*/
 
-//       this.place();
-//    }
+         this.checkSunk = function(){
+             /* Iterates through the ship's list of quares and checks the cooresponding position in the board */
+            for (var i = 0; i< this.squares.length; i++){
+                var r = this.squares[i][0];
+                var c = this.squares[i][1];
+                /* If a square's calue indicates part of a ship, we  know that the ship is not sunk and returns false */
+                if(this.board[r][c] === "S"){
+                    return false;
+                }
+            }
+             /* If the loop completes, we know that the ship is sunk and can set the ship's sunk variable to true and return true. */
+            this.sunk = true;
+            return true;
+         }
+}
 
     function drawBoard(board, player) {
         for (var i = 0; i < board.length; i++) {
@@ -60,11 +75,21 @@ $(function() {
                 var color = "#1AD1FF";
                 if(board[i][j] == "S" && player === "player") {
                     color = "gray";
+                } /* Use different colors to indicate hits and misses */
+                else if(board[i][j] == "H"){
+                    color = "#e60000";
+                }else if(board[i][j] == "M"){
+                    color = "#ffff1a";
                 }
                 $("#" + player + " > #" + i + "_" + j).css("background-color", color);
             }
         }
     }
+/* Function to see checkWon */
+
+
+/* Function compTurn for computer turn */
+
 
     function init() {
         playerBoard = [];
@@ -101,5 +126,12 @@ $(function() {
             compShips.push(new Ship("Destroyer", 2, compBoard));
 
             drawBoard(playerBoard, "player");
+
+            /* Click Event on class gridSquare */
+            $("#computer > .gridsquare").click(function(){
+                var id = $(this).attr("id").split("_");
+                var r = parseInt(id[0]);
+                var c = parseInt(id[1]);
+                /******#### END 1/22 ####*****/
         }
 });
